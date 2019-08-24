@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ylp.ccut.mapper.DemandMapper" >
+  <resultMap id="BaseResultMap" type="com.ylp.ccut.model.Demand" >
+    <id column="iddemand" property="iddemand" jdbcType="VARCHAR" />
+    <result column="topic" property="topic" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="developer" property="developer" jdbcType="VARCHAR" />
+    <result column="assigner" property="assigner" jdbcType="VARCHAR" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    iddemand, topic, state, developer, assigner, date, type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from demand
+    where iddemand = #{iddemand,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from demand
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from demand
+    where iddemand = #{iddemand,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.ylp.ccut.model.Demand" >
+    insert into demand (iddemand, topic, state, 
+      developer, assigner, date, 
+      type)
+    values (#{iddemand,jdbcType=VARCHAR}, #{topic,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, 
+      #{developer,jdbcType=VARCHAR}, #{assigner,jdbcType=VARCHAR}, #{date,jdbcType=DATE}, 
+      #{type,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ylp.ccut.model.Demand" >
+    insert into demand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="iddemand != null" >
+        iddemand,
+      </if>
+      <if test="topic != null" >
+        topic,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="developer != null" >
+        developer,
+      </if>
+      <if test="assigner != null" >
+        assigner,
+      </if>
+      <if test="date != null" >
+        date,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="iddemand != null" >
+        #{iddemand,jdbcType=VARCHAR},
+      </if>
+      <if test="topic != null" >
+        #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="developer != null" >
+        #{developer,jdbcType=VARCHAR},
+      </if>
+      <if test="assigner != null" >
+        #{assigner,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ylp.ccut.model.Demand" >
+    update demand
+    <set >
+      <if test="topic != null" >
+        topic = #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="developer != null" >
+        developer = #{developer,jdbcType=VARCHAR},
+      </if>
+      <if test="assigner != null" >
+        assigner = #{assigner,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        date = #{date,jdbcType=DATE},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+    </set>
+    where iddemand = #{iddemand,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ylp.ccut.model.Demand" >
+    update demand
+    set topic = #{topic,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      developer = #{developer,jdbcType=VARCHAR},
+      assigner = #{assigner,jdbcType=VARCHAR},
+      date = #{date,jdbcType=DATE},
+      type = #{type,jdbcType=INTEGER}
+    where iddemand = #{iddemand,jdbcType=VARCHAR}
+  </update>
+</mapper>
