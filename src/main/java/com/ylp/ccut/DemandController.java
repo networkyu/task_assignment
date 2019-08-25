@@ -1,12 +1,16 @@
 package com.ylp.ccut;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import com.ylp.ccut.mapper.DemandMapper;
 import com.ylp.ccut.mapper.UserMapper;
 import com.ylp.ccut.model.Demand;
 import com.ylp.ccut.model.User;
+import com.ylp.ccut.util.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +24,8 @@ public class DemandController {
    private UserMapper userMapper ;
     @Autowired
     private DemandMapper demandMapper;
+    @Autowired
+    private  DateUtil dateUtil;
     @RequestMapping("/test")
     public String  greeting(@RequestParam(value="name", defaultValue="World") String name) {
         return  "Hello,world";
@@ -46,14 +52,116 @@ public class DemandController {
             DemandView demandView = new DemandView();
             BeanUtils.copyProperties(demand,demandView);
             demandView.setDeveloperName(developerName);
+            //转换时间格式
+            if(demand.getDate() != null) {
+                // 省略时分秒
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String s = sdf.format(demand.getDate());
+                demandView.setDate(s);
+            } else {
+                demandView.setDate("");
+            }
+            // 如果分配者为空，则默认为空。
+            if(demand.getAssigner() == null){
+                demandView.setAssigner("");
+            }
             demandViews[i] = demandView;
         }
         returnMessage.data = demandViews;
         return returnMessage;
     }
-    public ReturnMessage addDemand(){
+    @RequestMapping("/add")
+    public ReturnMessage addDemand(@RequestParam(value="demandno") String demandno,
+                                   @RequestParam(value = "topic") String topic,
+                                   @RequestParam(value = "state") String state,
+                                   @RequestParam(value = "type") String type,
+                                   @RequestParam(value = "assigner",required = false) String assignment,
+                                   @RequestParam(value = "developer",required = false) String development,
+                                   @RequestParam(value = "date",required = false) String date){
+        insertDemand( demandno,
+                 topic,
+                 state,
+                 type,
+                 assignment,
+                 development,
+                 date);
         ReturnMessage returnMessage = ReturnMessage.getSuccessInstance();
         return returnMessage;
     }
+
+    /**
+     * 模型方法，插入需求
+     * @param demandno
+     * @param topic
+     * @param state
+     * @param type
+     * @param assignment
+     * @param development
+     * @param date
+     * @return
+     */
+    private boolean insertDemand(String demandno,
+                                 String topic,
+                                 String state,
+                                 String type,
+                                 String assignment,
+                                 String development,
+                                 String date){
+        Demand demand = new Demand();
+        demand.setIddemand(demandno);
+        demand.setTopic(topic);
+        demand.setState(Integer.parseInt(state));
+        demand.setType(Integer.parseInt(type));
+
+
+        if (development != null && development != ""){
+            demand.setDeveloper(development);
+        }
+        if (assignment != null && assignment != ""){
+            demand.setAssigner(assignment);
+        }
+        if (date != null && date != ""){
+            demand.setDate(dateUtil.dateFromString(date));
+        }
+        Integer result = demandMapper.insertSelective(demand);
+        if (result > 0 ){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 测试数据生成函数函数。
+     */
+    public void generatorDemand(){
+        String demandno = "sx-";
+        String topic = "";
+        String state = "";
+        String type = "";
+        String assignment = "";
+        String development = "";
+        String date = "";
+        String topics = "银行信用以及其他金融机构以货币形式向客户提供的信用，它是以银行作为中介金融机构所进行的资金融通形式。 [1] \n" +
+                "（1）间接性。在间接融资中，资金需求者和资金初始供应者之间不发生直接借贷关系；资金需求者和初始供应者之间由金融中介发挥桥梁作用。资金初始供应者与资金需求者只是与金融中介机构发生融资关系。\n" +
+                "（2）相对的集中性。间接融资通过金融中介机构进行。在多数情况下，金融中介并非是对某一个资金供应者与某一个资金需求者之间一对一的对应性中介；而是一方面面对资金供应者群体，另一方面面对资金需求者群体的综合性中介，由此可以看出，在间接融资中，金融机构具有融资中心的地位和作用。\n" +
+                "（3）信誉的差异性较小。由于间接融资相对集中于金融机构，世界各国对于金融机构的管理一般都较严格，金融机构自身的经营也多受到相应稳健性经营管理原则的约束，加上一些国家还实行了存款保险制度，因此，相对于直接融资来说，间接融资的信誉程度较高，风险性也相对较小，融资的稳定性较强。\n" +
+                "（4）全部具有可逆性。通过金融中介的间接融资均属于借贷性融资，到期均必须返还，并支付利息，具有可逆性。\n" +
+                "（5）融资的主动权主要掌握在金融中介手中。在间接融资中，资金主要集中于金融机构，资金贷给谁不贷给谁由金融中介决定。";
+        for (int i = 0; i < 1000; i++) {
+            Random random = new Random();
+            random.setSeed(i);
+            int randomInt = random.nextInt(460);
+            int randomState = random.nextInt(10);
+            int randomType = random.nextInt(20);
+
+            insertDemand(demandno + i,topic + topics.substring(randomInt,randomInt + 6),
+                    state+randomState,type+randomType,
+                    assignment + topics.substring(randomInt,randomInt + 3),
+                    "","");
+        }
+    }
+
+
+
 }
 

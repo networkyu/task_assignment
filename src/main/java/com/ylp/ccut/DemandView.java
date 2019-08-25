@@ -1,7 +1,10 @@
 package com.ylp.ccut;
 
-import java.util.Date;
+import lombok.Data;
+import lombok.ToString;
 
+import java.util.Date;
+@ToString
 public class DemandView {
     //需求号
     private String iddemand;
@@ -14,7 +17,7 @@ public class DemandView {
     // 分配者
     private String assigner;
 //    分配日期
-    private Date date;
+    private String date;
 //需求状态
     private Integer type;
     //开发者姓名
@@ -60,11 +63,11 @@ public class DemandView {
         this.assigner = assigner;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
