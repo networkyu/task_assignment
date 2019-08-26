@@ -27,7 +27,9 @@ public class DemandController {
     @Autowired
     private  DateUtil dateUtil;
     @RequestMapping("/test")
-    public String  greeting(@RequestParam(value="name", defaultValue="World") String name) {
+    public String  greeting(@RequestParam(value="name", defaultValue="World") String name)
+    {
+        generatorDemand();
         return  "Hello,world";
     }
     @RequestMapping("/all")
@@ -67,7 +69,25 @@ public class DemandController {
             }
             demandViews[i] = demandView;
         }
-        returnMessage.data = demandViews;
+        String[][] resultDatas = new String[demandViews.length][8];
+        for(int i = 0;i < demandViews.length;i++){
+            String[] resultView = new String[8];
+            resultView[0] = demandViews[i].getIddemand();
+            resultView[1] = demandViews[i].getTopic();
+            resultView[2] = demandViews[i].getDeveloperName();
+            resultView[3] = demandViews[i].getState().toString();
+            resultView[4] = demandViews[i].getType().toString();
+//            if(demandViews[i].getDate() == null ||
+//                    demandViews[i].getDate().equals("")){
+//                demandViews[i].setDate("");
+//            }
+            resultView[5] = demandViews[i].getDate();
+            resultView[6] = demandViews[i].getAssigner();
+            resultView[7] = "操作";
+            resultDatas[i] = resultView;
+        }
+
+        returnMessage.data = resultDatas;
         return returnMessage;
     }
     @RequestMapping("/add")
