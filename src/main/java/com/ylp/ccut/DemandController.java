@@ -69,9 +69,9 @@ public class DemandController {
             }
             demandViews[i] = demandView;
         }
-        String[][] resultDatas = new String[demandViews.length][8];
+        String[][] resultDatas = new String[demandViews.length][7];
         for(int i = 0;i < demandViews.length;i++){
-            String[] resultView = new String[8];
+            String[] resultView = new String[7];
             resultView[0] = demandViews[i].getIddemand();
             resultView[1] = demandViews[i].getTopic();
             resultView[2] = demandViews[i].getDeveloperName();
@@ -83,7 +83,7 @@ public class DemandController {
 //            }
             resultView[5] = demandViews[i].getDate();
             resultView[6] = demandViews[i].getAssigner();
-            resultView[7] = "操作";
+
             resultDatas[i] = resultView;
         }
 
