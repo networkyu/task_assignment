@@ -13,10 +13,8 @@ import com.ylp.ccut.model.User;
 import com.ylp.ccut.util.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @CrossOrigin
 public class DemandController {
@@ -179,6 +177,18 @@ public class DemandController {
                     assignment + topics.substring(randomInt,randomInt + 3),
                     "","");
         }
+    }
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    public ReturnMessage delete(@RequestParam(value="iddemand") String iddemand){
+        ReturnMessage returnMessage = ReturnMessage.getSuccessInstance();
+        if (iddemand.equals("")){
+            returnMessage.message = "需求号为空，不能删除";
+        }
+        if(demandMapper.deleteByPrimaryKey(iddemand) > 0){
+            //删除成功
+            returnMessage.result = true;
+        }
+        return returnMessage;
     }
 
 
