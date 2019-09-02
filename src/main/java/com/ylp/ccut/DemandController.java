@@ -61,19 +61,41 @@ public class DemandController {
             } else {
                 demandView.setDate("");
             }
+            //设置完成时间
+            if(demand.getCompletedate() != null) {
+                // 省略时分秒
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String s = sdf.format(demand.getCompletedate());
+                demandView.setCompletedate(s);
+            } else {
+                demandView.setCompletedate("");
+            }
             // 如果分配者为空，则默认为空。
             if(demand.getAssigner() == null){
                 demandView.setAssigner("");
             }
             demandViews[i] = demandView;
         }
-        String[][] resultDatas = new String[demandViews.length][7];
+        int columnValue = 8;
+        String[][] resultDatas = new String[demandViews.length][columnValue];
         for(int i = 0;i < demandViews.length;i++){
-            String[] resultView = new String[7];
+            String[] resultView = new String[columnValue];
             resultView[0] = demandViews[i].getIddemand();
             resultView[1] = demandViews[i].getTopic();
             resultView[2] = demandViews[i].getDeveloperName();
-            resultView[3] = demandViews[i].getState().toString();
+            if(demandViews[i].getState() == 0){
+                resultView[3] = "待分配";
+            }
+            if(demandViews[i].getState() == 1){
+                resultView[3] = "开发中";
+            }
+            if(demandViews[i].getState() == 2){
+                resultView[3] = "已完成";
+            }
+            if(demandViews[i].getState() == 3){
+                resultView[3] = "已取消";
+            }
+//            resultView[3] = demandViews[i].getState().toString();
             resultView[4] = demandViews[i].getType().toString();
 //            if(demandViews[i].getDate() == null ||
 //                    demandViews[i].getDate().equals("")){
@@ -81,7 +103,7 @@ public class DemandController {
 //            }
             resultView[5] = demandViews[i].getDate();
             resultView[6] = demandViews[i].getAssigner();
-
+            resultView[7] = demandViews[i].getCompletedate();
             resultDatas[i] = resultView;
         }
 
@@ -189,6 +211,41 @@ public class DemandController {
             returnMessage.result = true;
         }
         return returnMessage;
+    }
+    @RequestMapping(value = "/complete",method = RequestMethod.POST)
+    public ReturnMessage complete(@RequestParam(value="iddemand") String iddemand){
+        Demand demand = new Demand();
+        demand.setState(2);
+        demand.setIddemand(iddemand);
+        demand.setCompletedate(dateUtil.getSystemDate());
+        if(demandMapper.updateByPrimaryKeySelective(demand)>0){
+            return ReturnMessage.getSuccessInstance();
+        } else {
+            ReturnMessage returnMessage = ReturnMessage.getFailureInstance();
+            returnMessage.message = "需求号错误";
+            return returnMessage;
+        }
+    }
+    @RequestMapping(value = "/cancel",method = RequestMethod.POST)
+    public ReturnMessage cancelAssignment(@RequestParam(value="iddemand") String iddemand){
+        Demand demand = demandMapper.selectByPrimaryKey(iddemand);
+        if (demand != null) {
+            demand.setState(0);
+            demand.setIddemand(iddemand);
+            demand.setCompletedate(null);
+            //分配者，开发人员，分配时间
+            demand.setAssigner(null);
+            demand.setDeveloper(null);
+            demand.setDate(null);
+            if(demandMapper.updateByPrimaryKey(demand)>0){
+                return ReturnMessage.getSuccessInstance();
+            } else {
+                ReturnMessage returnMessage = ReturnMessage.getFailureInstance();
+                returnMessage.message = "需求号错误";
+                return returnMessage;
+            }
+        }
+        return ReturnMessage.getFailureInstance();
     }
 
 

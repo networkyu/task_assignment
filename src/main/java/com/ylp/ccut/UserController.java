@@ -33,6 +33,12 @@ public class UserController {
         if (tel != null && !tel.equals("")){
             user.setTel(tel);
         }
+        User selectUser = userMapper.selectByPrimaryKey(user.getIduser());
+        if(selectUser != null){
+            returnMessage.result = false;
+            returnMessage.message = "人员已存在";
+            return returnMessage;
+        }
         if (userMapper.insertSelective(user) <= 0){
             returnMessage.result = false;
             returnMessage.message = "人员已存在";

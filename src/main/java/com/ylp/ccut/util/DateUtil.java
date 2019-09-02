@@ -109,5 +109,8 @@ public class DateUtil{
         }
         return calendar.getTime();
     }
+    public Date getSystemDate(){
+        return  new Date();
+    }
 
 }

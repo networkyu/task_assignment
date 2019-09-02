@@ -18,7 +18,9 @@ public class DemandView {
     private String assigner;
 //    分配日期
     private String date;
-//需求状态
+    //    完成日期
+    private String completedate;
+//需求类型
     private Integer type;
     //开发者姓名
     private String developerName;
@@ -85,5 +87,13 @@ public class DemandView {
 
     public void setDeveloperName(String developerName) {
         this.developerName = developerName;
+    }
+
+    public String getCompletedate() {
+        return completedate;
+    }
+
+    public void setCompletedate(String completedate) {
+        this.completedate = completedate;
     }
 }

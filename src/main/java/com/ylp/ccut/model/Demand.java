@@ -17,6 +17,8 @@ public class Demand {
 
     private Integer type;
 
+    private Date completedate;
+
     public String getIddemand() {
         return iddemand;
     }
@@ -71,5 +73,13 @@ public class Demand {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Date getCompletedate() {
+        return completedate;
+    }
+
+    public void setCompletedate(Date completedate) {
+        this.completedate = completedate;
     }
 }
