@@ -110,18 +110,27 @@ public class DemandController {
         returnMessage.data = resultDatas;
         return returnMessage;
     }
-    @RequestMapping("/add")
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
     public ReturnMessage addDemand(@RequestParam(value="demandno") String demandno,
                                    @RequestParam(value = "topic") String topic,
-                                   @RequestParam(value = "state") String state,
-                                   @RequestParam(value = "type") String type,
+                                   @RequestParam(value = "state",required = false) String state,
+                                   @RequestParam(value = "type") Integer type,
                                    @RequestParam(value = "assigner",required = false) String assignment,
                                    @RequestParam(value = "developer",required = false) String development,
                                    @RequestParam(value = "date",required = false) String date){
-        insertDemand( demandno,
+        if(state == null){
+            state = "0";
+        }
+        //先查询
+        if (demandMapper.selectByPrimaryKey(demandno) != null){
+            ReturnMessage returnMessage = ReturnMessage.getFailureInstance();
+            returnMessage.message = "需求已存在";
+            return returnMessage;
+        }
+        boolean result = insertDemand( demandno,
                  topic,
                  state,
-                 type,
+                 String.valueOf(type),
                  assignment,
                  development,
                  date);

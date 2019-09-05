@@ -11,7 +11,7 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
     @RequestMapping(value = "/adduser",method = RequestMethod.POST)
-    public ReturnMessage delete(@RequestParam(value="iduser") String iduser,
+    public ReturnMessage add(@RequestParam(value="iduser") String iduser,
                                 @RequestParam(value="name") String name,
                                 @RequestParam(value="password",required = false) String password,
                                 @RequestParam(value="email",required = false) String email,
