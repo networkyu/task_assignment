@@ -2,6 +2,9 @@ package com.ylp.ccut.mapper;
 
 import com.ylp.ccut.model.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public interface UserMapper {
     int deleteByPrimaryKey(String iduser);
 
@@ -10,6 +13,7 @@ public interface UserMapper {
     int insertSelective(User record);
 
     User selectByPrimaryKey(String iduser);
+    ArrayList<User> selectAll();
 
     int updateByPrimaryKeySelective(User record);
 

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping(value = "/demand")
 @CrossOrigin
 public class DemandController {
     @Autowired
@@ -256,6 +257,20 @@ public class DemandController {
         }
         return ReturnMessage.getFailureInstance();
     }
+    @RequestMapping(value = "/assignment",method = RequestMethod.POST)
+    public ReturnMessage assignment(@RequestParam(value="iddemand") String iddemand,
+                                    @RequestParam(value="iduser") String iduser,
+                                    @RequestParam(value="assigner",required = false) String assigner){
+        Demand demand = new Demand();
+        demand.setDate(dateUtil.getSystemDate());
+        demand.setAssigner(assigner);
+        demand.setIddemand(iddemand);
+        demand.setDeveloper(iduser);
+        demand.setState(1);
+        demandMapper.updateByPrimaryKeySelective(demand);
+        return ReturnMessage.getSuccessInstance();
+    }
+
 
 
 

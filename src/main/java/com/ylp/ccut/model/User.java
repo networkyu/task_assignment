@@ -13,6 +13,8 @@ public class User {
 
     private String company;
 
+    private String profession;
+
     public String getIduser() {
         return iduser;
     }
@@ -59,5 +61,13 @@ public class User {
 
     public void setCompany(String company) {
         this.company = company == null ? null : company.trim();
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession == null ? null : profession.trim();
     }
 }

@@ -8,9 +8,10 @@
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="tel" property="tel" jdbcType="VARCHAR" />
     <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="profession" property="profession" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    iduser, name, password, email, tel, company
+    iduser, name, password, email, tel, company, profession
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -18,17 +19,22 @@
     from user
     where iduser = #{iduser,jdbcType=VARCHAR}
   </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from user
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from user
     where iduser = #{iduser,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.ylp.ccut.model.User" >
     insert into user (iduser, name, password, 
-      email, tel, company
-      )
+      email, tel, company, 
+      profession)
     values (#{iduser,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}
-      )
+      #{email,jdbcType=VARCHAR}, #{tel,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, 
+      #{profession,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ylp.ccut.model.User" >
     insert into user
@@ -51,6 +57,9 @@
       <if test="company != null" >
         company,
       </if>
+      <if test="profession != null" >
+        profession,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="iduser != null" >
@@ -70,6 +79,9 @@
       </if>
       <if test="company != null" >
         #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="profession != null" >
+        #{profession,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -91,6 +103,9 @@
       <if test="company != null" >
         company = #{company,jdbcType=VARCHAR},
       </if>
+      <if test="profession != null" >
+        profession = #{profession,jdbcType=VARCHAR},
+      </if>
     </set>
     where iduser = #{iduser,jdbcType=VARCHAR}
   </update>
@@ -100,7 +115,8 @@
       password = #{password,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       tel = #{tel,jdbcType=VARCHAR},
-      company = #{company,jdbcType=VARCHAR}
+      company = #{company,jdbcType=VARCHAR},
+      profession = #{profession,jdbcType=VARCHAR}
     where iduser = #{iduser,jdbcType=VARCHAR}
   </update>
 </mapper>
