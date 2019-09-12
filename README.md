@@ -4,4 +4,4 @@
 平台：Java 1.8 tomcat最新版 
      mysql8.0.17
      
-数据库结构在MYSQL目录下方便管理
+数据库结构在MYSQL目录下方便管理，导入前请先创建数据库"task_assignment_schema".
